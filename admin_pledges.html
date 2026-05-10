@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PLV SexEd Hub — Pledge Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy: #1a1f5e;
+    --gold: #f5c518;
+    --soft: #f4f6ff;
+    --white: #fff;
+    --text: #1e2040;
+    --muted: #6b7280;
+    --red: #e63946;
+    --green: #1a7a3a;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Nunito', sans-serif; background: var(--soft); color: var(--text); }
+
+  /* NAV */
+  nav {
+    background: var(--navy); padding: 1rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-title { color: var(--gold); font-weight: 900; font-size: 1.1rem; }
+  .nav-title span { color: rgba(255,255,255,0.6); font-size: 0.75rem; display: block; font-weight: 600; }
+  .back-btn {
+    color: rgba(255,255,255,0.8); text-decoration: none; font-weight: 700;
+    font-size: 0.85rem; border: 1.5px solid rgba(255,255,255,0.3);
+    padding: 0.4rem 1rem; border-radius: 999px; transition: all 0.2s;
+  }
+  .back-btn:hover { color: var(--gold); border-color: var(--gold); }
+
+  /* MAIN */
+  .container { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+  .header-row {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;
+  }
+  h1 { font-size: 1.6rem; font-weight: 900; color: var(--navy); }
+  .stats-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .stat-box {
+    background: var(--white); border-radius: 16px;
+    padding: 1rem 1.5rem; box-shadow: 0 4px 16px rgba(26,31,94,0.08);
+    min-width: 140px;
+  }
+  .stat-box .num { font-size: 2rem; font-weight: 900; color: var(--navy); line-height: 1; }
+  .stat-box .lbl { font-size: 0.78rem; font-weight: 700; color: var(--muted); margin-top: 0.2rem; }
+
+  /* CONTROLS */
+  .controls {
+    display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.25rem; align-items: center;
+  }
+  .search-box {
+    flex: 1; min-width: 200px; padding: 0.6rem 1rem;
+    border: 2px solid #e5e8f5; border-radius: 10px;
+    font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 600;
+    outline: none; transition: border-color 0.2s;
+  }
+  .search-box:focus { border-color: var(--navy); }
+
+  .btn {
+    padding: 0.6rem 1.25rem; border-radius: 10px; font-family: 'Nunito', sans-serif;
+    font-weight: 800; font-size: 0.85rem; cursor: pointer; border: none; transition: all 0.18s;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .btn-export { background: var(--navy); color: var(--gold); }
+  .btn-export:hover { opacity: 0.88; }
+  .btn-clear { background: #fde9ec; color: var(--red); }
+  .btn-clear:hover { background: #fcc; }
+
+  /* TABLE */
+  .table-wrap { background: var(--white); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(26,31,94,0.08); }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { background: var(--navy); }
+  thead th { color: var(--gold); font-weight: 800; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; padding: 0.9rem 1rem; text-align: left; }
+  tbody tr { border-bottom: 1px solid #f0f2ff; transition: background 0.15s; }
+  tbody tr:hover { background: var(--soft); }
+  tbody td { padding: 0.85rem 1rem; font-size: 0.88rem; font-weight: 600; color: var(--text); }
+  .badge {
+    display: inline-block; background: #d1f0d1; color: var(--green);
+    font-size: 0.7rem; font-weight: 900; padding: 0.2rem 0.6rem;
+    border-radius: 999px; letter-spacing: 0.04em;
+  }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center; padding: 4rem 2rem; color: var(--muted);
+  }
+  .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
+  .empty-state h3 { font-weight: 900; color: var(--navy); margin-bottom: 0.5rem; }
+  .empty-state p { font-size: 0.9rem; font-weight: 600; }
+
+  /* CONFIRM MODAL */
+  .modal-bg {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45); z-index: 200;
+    place-items: center;
+  }
+  .modal-bg.show { display: grid; }
+  .modal {
+    background: var(--white); border-radius: 20px;
+    padding: 2rem; max-width: 380px; width: 90%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2); text-align: center;
+  }
+  .modal h3 { font-size: 1.2rem; font-weight: 900; color: var(--navy); margin-bottom: 0.5rem; }
+  .modal p { font-size: 0.88rem; color: var(--muted); font-weight: 600; margin-bottom: 1.5rem; }
+  .modal-btns { display: flex; gap: 0.75rem; justify-content: center; }
+  .btn-cancel { background: var(--soft); color: var(--navy); }
+  .btn-confirm-del { background: var(--red); color: var(--white); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-title">
+    PLV SexEd Hub
+    <span>Pledge Admin Panel</span>
+  </div>
+  <a href="index.html" class="back-btn">← Back to Website</a>
+</nav>
+
+<div class="container">
+  <div class="header-row">
+    <h1>📋 Pledge Submissions</h1>
+    <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+      <button class="btn btn-export" onclick="exportCSV()">⬇ Export CSV</button>
+      <button class="btn btn-clear" onclick="showClearModal()">🗑 Clear All</button>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="num" id="total-count">0</div>
+      <div class="lbl">Total Pledges</div>
+    </div>
+    <div class="stat-box">
+      <div class="num" id="today-count">0</div>
+      <div class="lbl">Pledged Today</div>
+    </div>
+    <div class="stat-box">
+      <div class="num" id="latest-date">—</div>
+      <div class="lbl">Latest Pledge</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <input class="search-box" id="search" type="text" placeholder="🔍 Search by name or course..." oninput="renderTable()"/>
+  </div>
+
+  <div class="table-wrap">
+    <table id="pledge-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Student No.</th>
+          <th>Name</th>
+          <th>Course & Year</th>
+          <th>Date & Time</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+    <div class="empty-state" id="empty-state" style="display:none;">
+      <div class="icon">📭</div>
+      <h3>No pledges yet</h3>
+      <p>When students take the pledge on the website, they'll appear here.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Modal -->
+<div class="modal-bg" id="clear-modal">
+  <div class="modal">
+    <h3>Clear All Pledges?</h3>
+    <p>This will permanently delete all pledge records. This action cannot be undone.</p>
+    <div class="modal-btns">
+      <button class="btn btn-cancel" onclick="hideClearModal()">Cancel</button>
+      <button class="btn btn-confirm-del" onclick="clearAll()">Yes, Delete All</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function getPledges() {
+    return JSON.parse(localStorage.getItem('plv_pledges') || '[]');
+  }
+
+  function renderStats(pledges) {
+    document.getElementById('total-count').textContent = pledges.length;
+
+    const today = new Date().toLocaleDateString('en-PH', { timeZone: 'Asia/Manila', year: 'numeric', month: 'short', day: 'numeric' });
+    const todayCount = pledges.filter(p => p.timestamp && p.timestamp.includes(today)).length;
+    document.getElementById('today-count').textContent = todayCount;
+
+    if (pledges.length > 0) {
+      const last = pledges[pledges.length - 1];
+      // timestamp format: "May 10, 2025, 09:00 AM" — grab date portion
+      const dateStr = last.timestamp ? last.timestamp.split(' at ')[0].split(',').slice(0,2).join(',').trim() : '—';
+      document.getElementById('latest-date').textContent = dateStr;
+    }
+  }
+
+  function renderTable() {
+    const pledges = getPledges();
+    const query = document.getElementById('search').value.toLowerCase();
+    const filtered = query
+      ? pledges.filter(p =>
+          (p.name || '').toLowerCase().includes(query) ||
+          (p.studentNum || '').toLowerCase().includes(query) ||
+          (p.course || '').toLowerCase().includes(query)
+        )
+      : pledges;
+
+    const tbody = document.getElementById('table-body');
+    const empty = document.getElementById('empty-state');
+
+    if (pledges.length === 0) {
+      tbody.innerHTML = '';
+      empty.style.display = 'block';
+      document.getElementById('pledge-table').querySelector('thead').style.display = 'none';
+      return;
+    }
+
+    document.getElementById('pledge-table').querySelector('thead').style.display = '';
+    empty.style.display = 'none';
+
+    // Show newest first
+    const rows = [...filtered].reverse();
+    tbody.innerHTML = rows.map((p, i) => `
+      <tr>
+        <td style="color:var(--muted);font-size:0.78rem;">${rows.length - i}</td>
+        <td style="font-family:monospace;font-size:0.82rem;color:var(--muted);">${escHtml(p.studentNum || '—')}</td>
+        <td><strong>${escHtml(p.name || '—')}</strong></td>
+        <td>${escHtml(p.course || '—')}</td>
+        <td style="color:var(--muted);font-size:0.82rem;">${escHtml(p.timestamp || '—')}</td>
+        <td><span class="badge">✔ Pledged</span></td>
+      </tr>
+    `).join('');
+
+    renderStats(pledges);
+  }
+
+  function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function exportCSV() {
+    const pledges = getPledges();
+    if (pledges.length === 0) { alert('No pledges to export yet.'); return; }
+
+    const header = ['#', 'Student No.', 'Name', 'Course & Year', 'Date & Time', 'Status'];
+    const rows = pledges.map((p, i) => [
+      i + 1,
+      `"${(p.studentNum || '').replace(/"/g, '""')}"`,
+      `"${(p.name || '').replace(/"/g, '""')}"`,
+      `"${(p.course || '').replace(/"/g, '""')}"`,
+      `"${(p.timestamp || '').replace(/"/g, '""')}"`,
+      'Pledged'
+    ]);
+
+    const csv = [header.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `PLV_SexEdHub_Pledges_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function showClearModal() { document.getElementById('clear-modal').classList.add('show'); }
+  function hideClearModal() { document.getElementById('clear-modal').classList.remove('show'); }
+  function clearAll() {
+    localStorage.removeItem('plv_pledges');
+    hideClearModal();
+    renderTable();
+    renderStats([]);
+    document.getElementById('latest-date').textContent = '—';
+    document.getElementById('today-count').textContent = '0';
+    document.getElementById('total-count').textContent = '0';
+  }
+
+  // Init
+  renderTable();
+  renderStats(getPledges());
+</script>
+</body>
+</html>
