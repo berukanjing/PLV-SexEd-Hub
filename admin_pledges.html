@@ -125,7 +125,7 @@
 
 <div class="container">
   <div class="header-row">
-    <h1>📋 Pledge Submissions</h1>
+    <h1>Pledge Submissions</h1>
     <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
       <button class="btn btn-export" onclick="exportCSV()">⬇ Export CSV</button>
       <button class="btn btn-clear" onclick="showClearModal()">🗑 Clear All</button>
@@ -199,7 +199,6 @@
 
     if (pledges.length > 0) {
       const last = pledges[pledges.length - 1];
-      // timestamp format: "May 10, 2025, 09:00 AM" — grab date portion
       const dateStr = last.timestamp ? last.timestamp.split(' at ')[0].split(',').slice(0,2).join(',').trim() : '—';
       document.getElementById('latest-date').textContent = dateStr;
     }
