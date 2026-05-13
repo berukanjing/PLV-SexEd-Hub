@@ -107,7 +107,7 @@ Access the admin panel by opening `admin_pledges.html` in the same browser where
 
 ## Planned Features
 
-> 🚧 These features are currently under development.
+>  These features are currently under development.
 
 ### Online Database Integration (PHP + MySQL)
 
