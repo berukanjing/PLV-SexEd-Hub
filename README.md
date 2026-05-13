@@ -1,6 +1,4 @@
-PLV SexEd Hub 🎓
-
-**Know. Protect. Respect.
+PLV SexEd Hub 
 
 A student-made, judgment-free sexual health education website for Pamantasan ng Lungsod ng Valenzuela (PLV). Built as a PLV Student Health Initiative to provide accurate information on sexual health, consent, and healthy relationships.
 
@@ -16,9 +14,13 @@ A student-made, judgment-free sexual health education website for Pamantasan ng 
 - [Planned Features](#planned-features)
 - [Disclaimer](#disclaimer)
 
+---
+
 ## Overview
 
 PLV SexEd Hub is a static, front-end-only website designed to give PLV students easy access to reliable sexual health information. It covers STI awareness, consent education, myth-busting, and local health resources — all in a friendly, accessible format.
+
+---
 
 ## Features
 
