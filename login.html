@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PLV SexEd Hub — Admin Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy: #1a1f5e;
+    --navy-deep: #11154a;
+    --navy-light: #252b7a;
+    --gold: #f5c518;
+    --gold-dim: #c9a010;
+    --soft: #f4f6ff;
+    --white: #fff;
+    --text: #1e2040;
+    --muted: #6b7280;
+    --red: #e63946;
+    --red-dim: #c0303c;
+    --input-border: #d1d5f0;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--navy-deep);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Animated background */
+  .bg-pattern {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.07;
+    background: var(--gold);
+    animation: float 8s ease-in-out infinite;
+  }
+  .bg-circle:nth-child(1) { width: 500px; height: 500px; top: -150px; left: -150px; animation-delay: 0s; }
+  .bg-circle:nth-child(2) { width: 350px; height: 350px; bottom: -100px; right: -80px; animation-delay: 2s; background: #3b82f6; }
+  .bg-circle:nth-child(3) { width: 200px; height: 200px; top: 40%; left: 70%; animation-delay: 4s; }
+  .bg-dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(245,197,24,0.08) 1.5px, transparent 1.5px);
+    background-size: 32px 32px;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-20px) scale(1.03); }
+  }
+
+  /* CARD */
+  .login-wrapper {
+    position: relative; z-index: 10;
+    width: 100%; max-width: 420px;
+    padding: 1.5rem;
+    animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Logo area */
+  .logo-area {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .logo-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px; height: 72px;
+    background: var(--gold);
+    border-radius: 20px;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 8px 32px rgba(245,197,24,0.35);
+    animation: pulseBadge 3s ease-in-out infinite;
+  }
+  @keyframes pulseBadge {
+    0%, 100% { box-shadow: 0 8px 32px rgba(245,197,24,0.35); }
+    50% { box-shadow: 0 8px 48px rgba(245,197,24,0.55); }
+  }
+  .logo-title {
+    color: var(--gold);
+    font-weight: 900;
+    font-size: 1.4rem;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  .logo-sub {
+    color: rgba(255,255,255,0.45);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+
+  /* Card */
+  .card {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 2.25rem;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.05);
+  }
+
+  .card-header {
+    margin-bottom: 1.75rem;
+  }
+  .card-header h2 {
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: var(--navy);
+    margin-bottom: 0.25rem;
+  }
+  .card-header p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  /* Form */
+  .field { margin-bottom: 1.1rem; }
+  label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.45rem;
+  }
+
+  .input-wrap {
+    position: relative;
+  }
+  .input-icon {
+    position: absolute;
+    left: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 0.72rem 1rem 0.72rem 2.6rem;
+    border: 2px solid var(--input-border);
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text);
+    background: var(--soft);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+  input[type="text"]:focus,
+  input[type="password"]:focus {
+    border-color: var(--navy);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(26,31,94,0.08);
+  }
+  input[type="text"].error,
+  input[type="password"].error {
+    border-color: var(--red);
+    box-shadow: 0 0 0 4px rgba(230,57,70,0.1);
+  }
+
+  /* Show/hide password toggle */
+  .toggle-pw {
+    position: absolute;
+    right: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--muted);
+    padding: 0;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .toggle-pw:hover { color: var(--navy); }
+
+  /* Error message */
+  .error-msg {
+    display: none;
+    background: #fde9ec;
+    color: var(--red);
+    font-size: 0.8rem;
+    font-weight: 800;
+    border-radius: 10px;
+    padding: 0.6rem 0.9rem;
+    margin-bottom: 1rem;
+    border-left: 3px solid var(--red);
+    animation: shake 0.35s ease;
+  }
+  .error-msg.show { display: block; }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%,60% { transform: translateX(-6px); }
+    40%,80% { transform: translateX(6px); }
+  }
+
+  /* Submit button */
+  .btn-login {
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.85rem;
+    background: var(--navy);
+    color: var(--gold);
+    border: none;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 900;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(26,31,94,0.25);
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-login:hover {
+    background: var(--navy-light);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(26,31,94,0.35);
+  }
+  .btn-login:active { transform: translateY(0); }
+  .btn-login:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Loading spinner inside button */
+  .spinner {
+    display: none;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(245,197,24,0.3);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 0 auto;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .btn-text { display: block; }
+
+  /* Divider */
+  .divider {
+    margin: 1.5rem 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--input-border);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--input-border);
+  }
+
+  /* Footer */
+  .login-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: rgba(255,255,255,0.35);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+  .login-footer a {
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    font-weight: 800;
+    transition: color 0.2s;
+  }
+  .login-footer a:hover { color: var(--gold); }
+
+  /* Lock icon decoration */
+  .lock-strip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.6rem 0.9rem;
+    background: var(--soft);
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-pattern">
+  <div class="bg-dots"></div>
+  <div class="bg-circle"></div>
+  <div class="bg-circle"></div>
+  <div class="bg-circle"></div>
+</div>
+
+
+  <!-- Card -->
+  <div class="card">
+    <div class="card-header">
+      <h2>Admin Login</h2>
+      <p>Sign in to access the Pledge Admin Panel</p>
+    </div>
+
+    <div class="error-msg" id="error-msg">
+      ⚠ Incorrect username or password. Please try again.
+    </div>
+
+    <div class="field">
+      <label for="username">Username</label>
+      <div class="input-wrap">
+        <input
+          type="text"
+          id="username"
+          placeholder="Enter admin username"
+          autocomplete="username"
+          spellcheck="false"
+        />
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <div class="input-wrap">
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter admin password"
+          autocomplete="current-password"
+        />
+        <button class="toggle-pw" type="button" id="toggle-pw" aria-label="Show/hide password" title="Show password">
+          👁
+        </button>
+      </div>
+    </div>
+
+    <button class="btn-login" id="login-btn" onclick="handleLogin()">
+      <span class="btn-text" id="btn-text">Sign In to Admin Panel</span>
+      <span class="spinner" id="spinner"></span>
+    </button>
+
+    <div class="lock-strip">
+      Restricted access — authorized personnel only
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ── CONFIG ─────────────────────────────────────────────────
+  // Change these credentials as needed. For production, validate server-side.
+  const ADMIN_USERNAME = 'plvadmin';
+  const ADMIN_PASSWORD = 'plvsexed2025';
+  // ────────────────────────────────────────────────────────────
+
+  const usernameInput = document.getElementById('username');
+  const passwordInput = document.getElementById('password');
+  const errorMsg      = document.getElementById('error-msg');
+  const loginBtn      = document.getElementById('login-btn');
+  const btnText       = document.getElementById('btn-text');
+  const spinner       = document.getElementById('spinner');
+  const togglePwBtn   = document.getElementById('toggle-pw');
+
+  // Show/hide password
+  togglePwBtn.addEventListener('click', () => {
+    const isHidden = passwordInput.type === 'password';
+    passwordInput.type = isHidden ? 'text' : 'password';
+    togglePwBtn.textContent = isHidden ? '🙈' : '👁';
+  });
+
+  // Allow Enter key to submit
+  [usernameInput, passwordInput].forEach(el => {
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter') handleLogin();
+    });
+    // Clear error on typing
+    el.addEventListener('input', () => {
+      el.classList.remove('error');
+      errorMsg.classList.remove('show');
+    });
+  });
+
+  function setLoading(on) {
+    loginBtn.disabled = on;
+    btnText.style.display = on ? 'none' : 'block';
+    spinner.style.display = on ? 'block' : 'none';
+  }
+
+  function showError() {
+    usernameInput.classList.add('error');
+    passwordInput.classList.add('error');
+    errorMsg.classList.remove('show');
+    // Force reflow to restart shake animation
+    void errorMsg.offsetWidth;
+    errorMsg.classList.add('show');
+    passwordInput.value = '';
+    passwordInput.focus();
+  }
+
+  async function handleLogin() {
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!username || !password) {
+      showError();
+      errorMsg.textContent = '⚠ Please enter both username and password.';
+      return;
+    }
+
+    setLoading(true);
+
+    // Simulate a brief network delay for UX realism
+    await new Promise(r => setTimeout(r, 700));
+
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+      // Store session flag
+      sessionStorage.setItem('plv_admin_auth', 'true');
+      // Redirect
+      window.location.href = 'admin_pledges.html';
+    } else {
+      setLoading(false);
+      errorMsg.textContent = '⚠ Incorrect username or password. Please try again.';
+      showError();
+    }
+  }
+
+  // If already authenticated, skip login
+  if (sessionStorage.getItem('plv_admin_auth') === 'true') {
+    window.location.href = 'admin_pledges.html';
+  }
+</script>
+</body>
+</html>
